@@ -9,6 +9,7 @@ sealed class ThemeColors(
     val accent: Color,
     val text: Color,
     val field: Color,
+    val error: Color,
 ) {
 
     object LightColors : ThemeColors(
@@ -18,6 +19,7 @@ sealed class ThemeColors(
         accent = Color(0xFFD4A373),
         text = Color(0xFF755C4F),
         field = Color(0xFFFFFFFF),
+        error = Color(0xFFC6452E),
     )
 
     object DarkColors : ThemeColors(
@@ -27,5 +29,6 @@ sealed class ThemeColors(
         accent = Color(0xFFD4A079),
         text = Color(0xFFF4ECE4),
         field = Color(0xFF23201D),
+        error = Color(0xFFEF5350),
     )
 }

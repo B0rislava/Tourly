@@ -19,7 +19,9 @@ fun ThemeColors.toColorScheme(darkTheme: Boolean): ColorScheme {
             secondary = accent,
             onSecondary = background,
             tertiary = field,
-            onTertiary = text
+            onTertiary = text,
+            error = error,
+            onError = background
         )
     } else {
         lightColorScheme(
@@ -32,7 +34,9 @@ fun ThemeColors.toColorScheme(darkTheme: Boolean): ColorScheme {
             secondary = accent,
             onSecondary = background,
             tertiary = field,
-            onTertiary = text
+            onTertiary = text,
+            error = error,
+            onError = background
         )
     }
 }
