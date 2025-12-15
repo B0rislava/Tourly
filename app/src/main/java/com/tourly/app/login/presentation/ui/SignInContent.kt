@@ -1,8 +1,15 @@
 package com.tourly.app.login.presentation.ui
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -20,6 +27,10 @@ fun SignInContent(
     onEmailChange: (String) -> Unit,
     password: String,
     onPasswordChange: (String) -> Unit,
+    emailError: String?,
+    passwordError: String?,
+    loginError: String?,
+    isLoading: Boolean,
     onLoginClick: () -> Unit,
     onRegisterClick: () -> Unit,
 ) {
@@ -36,6 +47,15 @@ fun SignInContent(
             onValueChange = onEmailChange
         )
 
+        if (emailError != null) {
+            Text(
+                text = emailError,
+                color = MaterialTheme.colorScheme.error,
+                style = MaterialTheme.typography.bodySmall,
+                modifier = Modifier.padding(start = 16.dp, top = 4.dp)
+            )
+        }
+
         Spacer(modifier = Modifier.height(height = 10.dp))
 
         PasswordTextField(
@@ -43,12 +63,41 @@ fun SignInContent(
             onValueChange = onPasswordChange
         )
 
+        if (passwordError != null) {
+            Text(
+                text = passwordError,
+                color = MaterialTheme.colorScheme.error,
+                style = MaterialTheme.typography.bodySmall,
+                modifier = Modifier.padding(start = 16.dp, top = 4.dp)
+            )
+        }
+
         Spacer(modifier = Modifier.height(height = 20.dp))
 
         PrimaryButton(
             text = stringResource(id = R.string.login),
             onClick = onLoginClick
         )
+
+        if (isLoading) {
+            Box(
+                modifier = Modifier.fillMaxWidth(),
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator(
+                    modifier = Modifier.padding(8.dp)
+                )
+            }
+        }
+
+        if (loginError != null) {
+            Text(
+                text = loginError,
+                color = MaterialTheme.colorScheme.error,
+                style = MaterialTheme.typography.bodySmall,
+                modifier = Modifier.padding(top = 8.dp)
+            )
+        }
 
         Spacer(modifier = Modifier.height(height = 8.dp))
 

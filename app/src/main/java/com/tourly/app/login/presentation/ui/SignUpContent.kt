@@ -1,8 +1,15 @@
 package com.tourly.app.login.presentation.ui
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -30,6 +37,12 @@ fun SignUpContent(
     onLastNameChange: (String) -> Unit,
     role: UserRole,
     onRoleChange: (UserRole) -> Unit,
+    emailError: String?,
+    passwordError: String?,
+    firstNameError: String?,
+    lastNameError: String?,
+    signUpError: String?,
+    isLoading: Boolean,
     onRegisterClick: () -> Unit,
     onLoginClick: () -> Unit
 ) {
@@ -40,7 +53,6 @@ fun SignUpContent(
         )
 
         Spacer(modifier = Modifier.height(height = 20.dp))
-
 
         RoleSelector(
             selectedRole = role,
@@ -54,12 +66,30 @@ fun SignUpContent(
             onValueChange = onFirstNameChange
         )
 
+        if (firstNameError != null) {
+            Text(
+                text = firstNameError,
+                color = MaterialTheme.colorScheme.error,
+                style = MaterialTheme.typography.bodySmall,
+                modifier = Modifier.padding(start = 16.dp, top = 4.dp)
+            )
+        }
+
         Spacer(modifier = Modifier.height(height = 10.dp))
 
         LastNameTextField(
             value = lastName,
             onValueChange = onLastNameChange
         )
+
+        if (lastNameError != null) {
+            Text(
+                text = lastNameError,
+                color = MaterialTheme.colorScheme.error,
+                style = MaterialTheme.typography.bodySmall,
+                modifier = Modifier.padding(start = 16.dp, top = 4.dp)
+            )
+        }
 
         Spacer(modifier = Modifier.height(height = 10.dp))
 
@@ -68,6 +98,15 @@ fun SignUpContent(
             onValueChange = onEmailChange
         )
 
+        if (emailError != null) {
+            Text(
+                text = emailError,
+                color = MaterialTheme.colorScheme.error,
+                style = MaterialTheme.typography.bodySmall,
+                modifier = Modifier.padding(start = 16.dp, top = 4.dp)
+            )
+        }
+
         Spacer(modifier = Modifier.height(height = 10.dp))
 
         PasswordTextField(
@@ -75,12 +114,42 @@ fun SignUpContent(
             onValueChange = onPasswordChange
         )
 
+        if (passwordError != null) {
+            Text(
+                text = passwordError,
+                color = MaterialTheme.colorScheme.error,
+                style = MaterialTheme.typography.bodySmall,
+                modifier = Modifier.padding(start = 16.dp, top = 4.dp)
+            )
+        }
+
         Spacer(modifier = Modifier.height(height = 20.dp))
 
         PrimaryButton(
             text = stringResource(id = R.string.register),
-            onClick = onRegisterClick
+            onClick = onRegisterClick,
+            enabled = !isLoading
         )
+
+        if (isLoading) {
+            Box(
+                modifier = Modifier.fillMaxWidth(),
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator(
+                    modifier = Modifier.padding(8.dp)
+                )
+            }
+        }
+
+        if (signUpError != null) {
+            Text(
+                text = signUpError,
+                color = MaterialTheme.colorScheme.error,
+                style = MaterialTheme.typography.bodySmall,
+                modifier = Modifier.padding(top = 8.dp)
+            )
+        }
 
         Spacer(modifier = Modifier.height(height = 8.dp))
 
@@ -90,5 +159,4 @@ fun SignUpContent(
             onActionClick = onLoginClick
         )
     }
-
 }
