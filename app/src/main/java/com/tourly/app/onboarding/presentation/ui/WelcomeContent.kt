@@ -6,11 +6,9 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.requiredWidth
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -25,7 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.tourly.app.R
 import com.tourly.app.core.ui.components.foundation.AppLogoWithText
-import com.tourly.app.core.ui.components.foundation.PrimaryButton
+import com.tourly.app.core.ui.components.foundation.OutlinedPillButton
 import com.tourly.app.core.ui.theme.OutfitFamily
 
 @Composable
@@ -69,27 +67,25 @@ fun WelcomeContent(
                 textAlign = TextAlign.Center,
                 modifier = Modifier.padding(horizontal = 24.dp)
             )
+
+            Spacer(modifier = Modifier.height(height = 28.dp))
+
+            OutlinedPillButton(
+                text = "Start Now",
+                onClick = onGetStartedClick,
+                modifier = Modifier
+                    .wrapContentWidth()
+            )
         }
 
         Image(
-            painter = painterResource(id = R.drawable.globe),
+            painter = painterResource(id = R.drawable.traveler),
             contentDescription = null,
             modifier = Modifier
-                .requiredWidth(width = 470.dp)
-                .height(height = 700.dp)
-                .align(Alignment.BottomEnd)
-                .offset(x = 70.dp, y = 40.dp),
+                .align(Alignment.BottomStart),
             contentScale = ContentScale.FillWidth
         )
 
-        PrimaryButton(
-            text = stringResource(id = R.string.discover_journey),
-            onClick = onGetStartedClick,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 24.dp)
-                .padding(bottom = 70.dp)
-                .align(Alignment.BottomCenter)
-        )
+
     }
 }
