@@ -41,15 +41,15 @@ fun SignInScreen(
 
 }
 
-@Preview(name = "Sign In Dark Mode",
-    showBackground = true,
-    showSystemUi = true,
-    uiMode = Configuration.UI_MODE_NIGHT_YES or Configuration.UI_MODE_TYPE_NORMAL
-)
 @Preview(name = "Sign In Light Mode",
     showBackground = true,
     showSystemUi = true,
     uiMode = Configuration.UI_MODE_TYPE_NORMAL
+)
+@Preview(name = "Sign In Dark Mode",
+    showBackground = true,
+    showSystemUi = true,
+    uiMode = Configuration.UI_MODE_NIGHT_YES or Configuration.UI_MODE_TYPE_NORMAL
 )
 @Composable
 fun PreviewSignInScreen() {
