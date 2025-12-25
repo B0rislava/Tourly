@@ -1,9 +1,12 @@
 package com.tourly.app.core.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation3.runtime.NavEntry
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.ui.NavDisplay
+import com.tourly.app.home.presentation.ui.HomeScreen
+import com.tourly.app.home.presentation.viewmodel.HomeViewModel
 import com.tourly.app.login.presentation.ui.SignInScreen
 import com.tourly.app.login.presentation.ui.SignUpScreen
 import com.tourly.app.onboarding.presentation.ui.WelcomeScreen
@@ -15,6 +18,7 @@ fun NavigationRoot() {
 
     NavDisplay(
         backStack = backStack,
+        onBack = { backStack.removeLastOrNull() },
         entryProvider = { key ->
             when(key) {
                 is Route.Welcome -> {
@@ -45,9 +49,20 @@ fun NavigationRoot() {
                                 backStack.add(Route.SignIn)
                             },
                             onSignUpSuccess = {
-                                // TODO: Navigate to Home
+                                // Clear back stack so user can't go back to auth screens
+                                backStack.clear()
+                                // Dummy info for testing
+                                backStack.add(Route.Home(userId = "user_123", email = "test@example.com"))
                             }
                         )
+                    }
+                }
+                is Route.Home -> {
+                    NavEntry(key) {
+                        val viewModel = hiltViewModel<HomeViewModel, HomeViewModel.Factory> { factory ->
+                            factory.create(key)
+                        }
+                        HomeScreen(vm = viewModel)
                     }
                 }
                 else -> error("Unknown NavKey: $key")
