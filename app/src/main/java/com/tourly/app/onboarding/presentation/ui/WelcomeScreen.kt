@@ -38,11 +38,13 @@ annotation class DevicePreviews
 @Composable
 fun WelcomeScreen(
     windowSizeState: WindowSizeState,
-    onGetStartedClick: () -> Unit = {}
+    onGetStartedClick: () -> Unit = {},
+    onTestConnectionClick: () -> Unit = {}
 ) {
     WelcomeContent(
         windowSizeState = windowSizeState,
-        onGetStartedClick = onGetStartedClick
+        onGetStartedClick = onGetStartedClick,
+        onTestConnectionClick = onTestConnectionClick
     )
 }
 

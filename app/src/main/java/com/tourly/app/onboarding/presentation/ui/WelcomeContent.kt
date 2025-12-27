@@ -31,7 +31,8 @@ import com.tourly.app.core.ui.theme.OutfitFamily
 @Composable
 fun WelcomeContent(
     windowSizeState: WindowSizeState,
-    onGetStartedClick: () -> Unit
+    onGetStartedClick: () -> Unit,
+    onTestConnectionClick: () -> Unit = {}
 ) {
     Box(
         modifier = Modifier
@@ -45,7 +46,8 @@ fun WelcomeContent(
         WelcomeContentLayout(
             isCompactHeight = isCompactHeight,
             isExpandedWidth = isExpandedWidth,
-            onGetStartedClick = onGetStartedClick
+            onGetStartedClick = onGetStartedClick,
+            onTestConnectionClick = onTestConnectionClick
         )
     }
 }
@@ -54,7 +56,8 @@ fun WelcomeContent(
 private fun WelcomeContentLayout(
     isCompactHeight: Boolean,
     isExpandedWidth: Boolean,
-    onGetStartedClick: () -> Unit
+    onGetStartedClick: () -> Unit,
+    onTestConnectionClick: () -> Unit
 ) {
     Box(modifier = Modifier.fillMaxSize()) {
         Column(
@@ -96,6 +99,14 @@ private fun WelcomeContentLayout(
             OutlinedPillButton(
                 text = "Start Now",
                 onClick = onGetStartedClick,
+                modifier = Modifier.wrapContentWidth()
+            )
+            
+            Spacer(modifier = Modifier.height(height = 12.dp))
+            
+            OutlinedPillButton(
+                text = "Test Connection",
+                onClick = onTestConnectionClick,
                 modifier = Modifier.wrapContentWidth()
             )
 

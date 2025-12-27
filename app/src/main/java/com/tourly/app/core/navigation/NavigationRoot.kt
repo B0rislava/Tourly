@@ -12,12 +12,14 @@ import com.tourly.app.home.presentation.viewmodel.HomeViewModel
 import com.tourly.app.login.presentation.ui.SignInScreen
 import com.tourly.app.login.presentation.ui.SignUpScreen
 import com.tourly.app.onboarding.presentation.ui.WelcomeScreen
+import com.tourly.app.test.presentation.ui.TestConnectionScreen
+import kotlinx.serialization.modules.SerializersModule
+import kotlinx.serialization.modules.polymorphic
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun NavigationRoot() {
     val windowSizeState = rememberWindowSizeState()
-
     val backStack = rememberNavBackStack(Route.Welcome)
 
     NavDisplay(
@@ -31,6 +33,9 @@ fun NavigationRoot() {
                             windowSizeState = windowSizeState,
                             onGetStartedClick = {
                                 backStack.add(Route.SignUp)
+                            },
+                            onTestConnectionClick = {
+                                backStack.add(Route.TestConnection)
                             }
                         )
                     }
@@ -62,6 +67,13 @@ fun NavigationRoot() {
                         )
                     }
                 }
+                is Route.TestConnection -> {
+                    NavEntry(key) {
+                        TestConnectionScreen(
+                            onNavigateBack = {
+                                backStack.removeLastOrNull()
+                            }
+                        )
                 is Route.Home -> {
                     NavEntry(key) {
                         val viewModel = hiltViewModel<HomeViewModel, HomeViewModel.Factory> { factory ->
