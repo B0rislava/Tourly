@@ -90,7 +90,8 @@ fun SignInContent(
 
             PrimaryButton(
                 text = stringResource(id = R.string.login),
-                onClick = onLoginClick
+                onClick = onLoginClick,
+                enabled = !isLoading
             )
 
             if (isLoading) {

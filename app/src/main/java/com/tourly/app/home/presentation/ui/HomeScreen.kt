@@ -7,10 +7,14 @@ import com.tourly.app.core.ui.utils.WindowSizeState
 fun HomeScreen(
     // TODO: expose state from the VM, but here we just pass the VM for demo
     vm: HomeViewModel,
-    windowSizeState: WindowSizeState
+    windowSizeState: WindowSizeState,
+    onLogout: () -> Unit
 ) {
     HomeContent(
         userId = vm.route.userId,
-        email = vm.route.email
+        email = vm.route.email,
+        onLogoutClick = {
+            vm.logout(onLogoutSuccess = onLogout)
+        }
     )
 }
