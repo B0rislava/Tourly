@@ -2,6 +2,7 @@ package com.tourly.app.login.presentation.ui
 
 import android.content.res.Configuration
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -22,6 +23,12 @@ fun SignInScreen(
     LaunchedEffect(uiState.isSuccess) {
         if (uiState.isSuccess) {
             onLoginSuccess()
+        }
+    }
+
+    DisposableEffect(Unit) {
+        onDispose {
+            viewModel.resetState()
         }
     }
 
