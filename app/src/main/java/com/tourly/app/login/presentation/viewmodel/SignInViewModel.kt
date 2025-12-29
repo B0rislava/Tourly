@@ -17,6 +17,14 @@ class SignInViewModel @Inject constructor(
     private val signInUseCase: SignInUseCase
 ) : ViewModel() {
 
+    override fun onCleared() {
+        super.onCleared()
+    }
+
+    fun resetState() {
+        _uiState.value = SignInUiState()
+    }
+
     // functions that the ui would call for some kind of user action for example a button click
 
     private val _uiState = MutableStateFlow(value = SignInUiState())

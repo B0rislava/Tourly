@@ -6,6 +6,7 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import com.google.crypto.tink.Aead
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
@@ -15,6 +16,7 @@ interface TokenManager {
     suspend fun saveToken(token: String)
     suspend fun getToken(): String?
     suspend fun clearToken()
+    fun getTokenFlow(): Flow<String?>
 }
 
 @Singleton
@@ -54,6 +56,25 @@ class TokenManagerImpl @Inject constructor(
     override suspend fun clearToken() {
         dataStore.edit { preferences ->
             preferences.remove(AUTH_TOKEN)
+        }
+    }
+
+    override fun getTokenFlow(): Flow<String?> {
+        return dataStore.data.map { preferences ->
+            preferences[AUTH_TOKEN]
+        }.map { encryptedString ->
+            if (encryptedString == null) {
+                 null
+            } else {
+                try {
+                    val encryptedBytes = Base64.decode(encryptedString, Base64.DEFAULT)
+                    val decryptedBytes = aead.decrypt(encryptedBytes, null)
+                    String(decryptedBytes, Charsets.UTF_8)
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    null
+                }
+            }
         }
     }
 }
