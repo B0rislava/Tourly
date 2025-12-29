@@ -1,6 +1,6 @@
 package com.tourly.app.login.domain.usecase
 
-import com.tourly.app.core.network.model.RegisterResponse
+import com.tourly.app.core.network.model.RegisterResponseDto
 import com.tourly.app.login.domain.UserRole
 import com.tourly.app.login.domain.repository.AuthRepository
 import javax.inject.Inject
@@ -14,7 +14,7 @@ class SignUpUseCase @Inject constructor(
         lastName: String,
         password: String,
         role: UserRole
-    ): Result<RegisterResponse> {
+    ): Result<RegisterResponseDto> {
         return repository.signUp(
             email = email,
             firstName = firstName,

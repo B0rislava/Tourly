@@ -2,10 +2,10 @@ package com.tourly.app.login.data.repository
 
 import com.tourly.app.core.network.api.AuthApiService
 import com.tourly.app.core.network.model.ErrorResponse
-import com.tourly.app.core.network.model.LoginRequest
-import com.tourly.app.core.network.model.LoginResponse
-import com.tourly.app.core.network.model.RegisterRequest
-import com.tourly.app.core.network.model.RegisterResponse
+import com.tourly.app.core.network.model.LoginRequestDto
+import com.tourly.app.core.network.model.LoginResponseDto
+import com.tourly.app.core.network.model.RegisterRequestDto
+import com.tourly.app.core.network.model.RegisterResponseDto
 import com.tourly.app.login.domain.UserRole
 import com.tourly.app.login.domain.repository.AuthRepository
 import com.tourly.app.core.storage.TokenManager
@@ -18,11 +18,11 @@ class AuthRepositoryImpl @Inject constructor(
     private val tokenManager: TokenManager
 ) : AuthRepository {
 
-    override suspend fun signIn(email: String, password: String): Result<LoginResponse> {
+    override suspend fun signIn(email: String, password: String): Result<LoginResponseDto> {
         return try {
-            val response = apiService.login(LoginRequest(email, password))
+            val response = apiService.login(LoginRequestDto(email, password))
             if (response.status.isSuccess()) {
-                val loginResponse = response.body<LoginResponse>()
+                val loginResponse = response.body<LoginResponseDto>()
                 tokenManager.saveToken(loginResponse.token)
                 Result.success(loginResponse)
             } else {
@@ -46,9 +46,9 @@ class AuthRepositoryImpl @Inject constructor(
         lastName: String,
         password: String,
         role: UserRole
-    ): Result<RegisterResponse> {
+    ): Result<RegisterResponseDto> {
         return try {
-            val request = RegisterRequest(
+            val request = RegisterRequestDto(
                 email = email,
                 firstName = firstName,
                 lastName = lastName,

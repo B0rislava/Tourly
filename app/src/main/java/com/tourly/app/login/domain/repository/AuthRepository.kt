@@ -1,14 +1,14 @@
 package com.tourly.app.login.domain.repository
 
-import com.tourly.app.core.network.model.LoginResponse
-import com.tourly.app.core.network.model.RegisterResponse
+import com.tourly.app.core.network.model.LoginResponseDto
+import com.tourly.app.core.network.model.RegisterResponseDto
 import com.tourly.app.login.domain.UserRole
 
 interface AuthRepository {
     suspend fun signIn(
         email: String,
         password: String
-    ): Result<LoginResponse>
+    ): Result<LoginResponseDto>
 
     suspend fun signUp(
         email: String,
@@ -16,5 +16,5 @@ interface AuthRepository {
         lastName: String,
         password: String,
         role: UserRole
-    ): Result<RegisterResponse>
+    ): Result<RegisterResponseDto>
 }
