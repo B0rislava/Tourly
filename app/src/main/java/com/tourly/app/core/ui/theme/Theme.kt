@@ -18,10 +18,10 @@ fun ThemeColors.toColorScheme(darkTheme: Boolean): ColorScheme {
             onBackground = text,
 
             surface = surface,
-            onSurface = text,
+            onSurface = primary,
 
             primary = primary,
-            onPrimary = text,
+            onPrimary = background,
 
             secondary = accent,
             onSecondary = background,
@@ -35,10 +35,10 @@ fun ThemeColors.toColorScheme(darkTheme: Boolean): ColorScheme {
             onBackground = text,
 
             surface = surface,
-            onSurface = text,
+            onSurface = primary,
 
             primary = primary,
-            onPrimary = text,
+            onPrimary = background,
 
             secondary = accent,
             onSecondary = background,
