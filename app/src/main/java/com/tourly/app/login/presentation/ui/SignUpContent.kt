@@ -171,7 +171,9 @@ fun SignUpContent(
             PrimaryButton(
                 text = stringResource(id = R.string.register),
                 onClick = onRegisterClick,
-                enabled = !isLoading
+                enabled = !isLoading,
+                containerColor = MaterialTheme.colorScheme.primary,
+                contentColor = MaterialTheme.colorScheme.onPrimary
             )
 
             if (isLoading) {
