@@ -32,4 +32,11 @@ class MainViewModel @Inject constructor(
             }
         }
     }
+
+    fun logout(onLogoutComplete: () -> Unit) {
+        viewModelScope.launch {
+            tokenManager.clearToken()
+            onLogoutComplete()
+        }
+    }
 }
