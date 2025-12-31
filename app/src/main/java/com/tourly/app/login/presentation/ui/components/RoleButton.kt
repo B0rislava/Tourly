@@ -45,14 +45,14 @@ fun RoleButton(
             Icon(
                 imageVector = icon,
                 contentDescription = null,
-                tint = if (isActive) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSecondary,
+                tint = if (isActive) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.secondary,
                 modifier = Modifier.size(18.dp)
             )
             Spacer(modifier = Modifier.width(6.dp))
             Text(
                 text = text,
                 fontSize = 14.sp,
-                color = if (isActive) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSecondary
+                color = if (isActive) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.secondary
             )
         }
     }

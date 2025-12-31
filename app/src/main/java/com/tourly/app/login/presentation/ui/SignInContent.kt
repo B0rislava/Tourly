@@ -91,7 +91,9 @@ fun SignInContent(
             PrimaryButton(
                 text = stringResource(id = R.string.login),
                 onClick = onLoginClick,
-                enabled = !isLoading
+                enabled = !isLoading,
+                containerColor = MaterialTheme.colorScheme.primary,
+                contentColor = MaterialTheme.colorScheme.onPrimary
             )
 
             if (isLoading) {

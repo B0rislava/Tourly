@@ -1,11 +1,11 @@
-package com.tourly.app.home.presentation.ui
+package com.tourly.app.chat.presentation.ui
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 
 @Composable
-fun HomeScreen(
+fun ChatScreen(
     modifier: Modifier = Modifier
 ) {
-    HomeContent(modifier = modifier)
+    ChatContent(modifier = modifier)
 }

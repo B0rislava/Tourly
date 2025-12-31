@@ -1,11 +1,11 @@
-package com.tourly.app.home.presentation.ui
+package com.tourly.app.dashboard.presentation.ui
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 
 @Composable
-fun HomeScreen(
+fun DashboardScreen(
     modifier: Modifier = Modifier
 ) {
-    HomeContent(modifier = modifier)
+    DashboardContent(modifier = modifier)
 }

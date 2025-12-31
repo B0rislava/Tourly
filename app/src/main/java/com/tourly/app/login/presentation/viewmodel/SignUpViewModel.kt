@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.tourly.app.login.domain.UserRole
 import com.tourly.app.login.domain.usecase.SignUpUseCase
+import com.tourly.app.login.domain.usecase.SignInUseCase
 import com.tourly.app.login.presentation.state.SignUpUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,7 +16,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SignUpViewModel @Inject constructor(
-    private val signUpUseCase: SignUpUseCase
+    private val signUpUseCase: SignUpUseCase,
+    private val signInUseCase: SignInUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(SignUpUiState())
@@ -83,11 +85,23 @@ class SignUpViewModel @Inject constructor(
             )
 
             result.onSuccess {
-                _uiState.update { state ->
-                    state.copy(
-                        isLoading = false,
-                        isSuccess = true
-                    )
+                // Auto-login after successful registration
+                val loginResult = signInUseCase(currentState.email, currentState.password)
+                
+                loginResult.onSuccess {
+                    _uiState.update { state ->
+                        state.copy(
+                            isLoading = false,
+                            isSuccess = true
+                        )
+                    }
+                }.onFailure { error ->
+                    _uiState.update { state ->
+                        state.copy(
+                            isLoading = false,
+                            signUpError = "Registration successful, but login failed: ${error.message}"
+                        )
+                    }
                 }
             }.onFailure { error ->
                 _uiState.update { state ->

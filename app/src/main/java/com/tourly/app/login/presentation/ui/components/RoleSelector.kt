@@ -53,7 +53,7 @@ fun RoleSelector(
                     translationX = size.width * indicatorProgress
                 }
                 .background(
-                    color = MaterialTheme.colorScheme.primary,
+                    color = MaterialTheme.colorScheme.secondary,
                     shape = RoundedCornerShape(12.dp)
                 )
         )
