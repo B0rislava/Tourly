@@ -1,6 +1,7 @@
 package com.tourly.app.core.ui.components
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -17,7 +18,9 @@ import com.tourly.app.core.ui.theme.OutfitFamily
 @Composable
 fun SimpleTopBar(
     title: String,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    navigationIcon: @Composable () -> Unit = {},
+    actions: @Composable RowScope.() -> Unit = {}
 ) {
     TopAppBar(
         title = {
@@ -33,6 +36,8 @@ fun SimpleTopBar(
                 )
             }
         },
+        navigationIcon = navigationIcon,
+        actions = actions,
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = MaterialTheme.colorScheme.surface,
             titleContentColor = MaterialTheme.colorScheme.onSurface

@@ -1,11 +1,14 @@
 package com.tourly.app.profile.presentation.ui
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -14,15 +17,36 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.tourly.app.core.presentation.state.UserUiState
 import com.tourly.app.core.presentation.viewmodel.UserViewModel
+import com.tourly.app.core.ui.theme.OutfitFamily
 
 @Composable
 fun ProfileScreen(
+    modifier: Modifier = Modifier,
     userViewModel: UserViewModel = hiltViewModel(),
+    snackbarHostState: SnackbarHostState,
     onLogout: () -> Unit,
     onNavigateToSettings: () -> Unit,
-    modifier: Modifier = Modifier
+    onEditingStateChange: (Boolean, (() -> Unit)?) -> Unit
 ) {
     val userState by userViewModel.uiState.collectAsState()
+
+    // Notify parent about editing state changes
+    LaunchedEffect(userState) {
+        when (val state = userState) {
+            is UserUiState.Success -> {
+                onEditingStateChange(state.isEditing, userViewModel::cancelEditing)
+            }
+            else -> {
+                onEditingStateChange(false, null)
+            }
+        }
+    }
+
+    LaunchedEffect(key1 = true) {
+        userViewModel.events.collect { message ->
+            snackbarHostState.showSnackbar(message)
+        }
+    }
 
     Box(
         modifier = modifier.fillMaxSize(),
@@ -32,21 +56,38 @@ fun ProfileScreen(
             is UserUiState.Idle -> {
                 Text(
                     text = "No user data available",
-                    style = MaterialTheme.typography.bodyLarge
+                    style = MaterialTheme.typography.bodyLarge,
+                    fontFamily = OutfitFamily
                 )
             }
             is UserUiState.Loading -> {
                 CircularProgressIndicator()
             }
             is UserUiState.Success -> {
-                ProfileContent(
-                    firstName = state.user.firstName,
-                    lastName = state.user.lastName,
-                    email = state.user.email,
-                    profilePictureUrl = state.user.profilePictureUrl,
-                    onLogout = onLogout,
-                    onNavigateToSettings = onNavigateToSettings
-                )
+                if (state.isEditing) {
+                    BackHandler {
+                        userViewModel.cancelEditing()
+                    }
+
+                    EditProfileContent(
+                        state = state.editState,
+                        onFirstNameChange = userViewModel::onFirstNameChange,
+                        onLastNameChange = userViewModel::onLastNameChange,
+                        onEmailChange = userViewModel::onEmailChange,
+                        onPasswordChange = userViewModel::onPasswordChange,
+                        onSaveClick = userViewModel::saveProfile
+                    )
+                } else {
+                    ProfileContent(
+                        firstName = state.user.firstName,
+                        lastName = state.user.lastName,
+                        email = state.user.email,
+                        profilePictureUrl = state.user.profilePictureUrl,
+                        onLogout = onLogout,
+                        onNavigateToSettings = onNavigateToSettings,
+                        onEditProfile = userViewModel::startEditing
+                    )
+                }
             }
             is UserUiState.Error -> {
                 Text(
@@ -68,6 +109,7 @@ private fun ProfileContentPreview() {
         email = "ashley.watson@example.com",
         profilePictureUrl = null,
         onLogout = {},
-        onNavigateToSettings = {}
+        onNavigateToSettings = {},
+        onEditProfile = {}
     )
 }
