@@ -16,7 +16,7 @@ fun LastNameTextField(
     AppTextField(
         value = value,
         onValueChange = onValueChange,
-        label = "Last Name",
+        label = stringResource(id = R.string.last_name),
         leadingIcon = {
             Icon(
                 imageVector = Icons.Outlined.Person,
@@ -25,4 +25,3 @@ fun LastNameTextField(
         }
     )
 }
-
