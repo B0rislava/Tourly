@@ -66,6 +66,7 @@ dependencies {
     implementation(libs.androidx.compose.material3.window.sizeclass)
     implementation(libs.androidx.compose.material3.adaptive.navigation)
     implementation(libs.androidx.compose.foundation)
+    implementation(libs.androidx.exifinterface)
     ksp(libs.hilt.android.compiler)
     implementation(libs.androidx.hilt.navigation.compose)
     
@@ -81,7 +82,6 @@ dependencies {
     implementation(libs.androidx.datastore.preferences)
 
     implementation(libs.coil.compose)
-
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
