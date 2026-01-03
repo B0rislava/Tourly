@@ -16,9 +16,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import com.tourly.app.R
 import com.tourly.app.core.ui.theme.OutfitFamily
 
 @Composable
@@ -29,8 +31,8 @@ fun ProfileHeader(
     profilePictureUrl: String?,
     modifier: Modifier = Modifier
 ) {
-    val defaultProfilePicture = "https://api.dicebear.com/9.x/avataaars/png?seed=$email"
-    
+    val defaultPainter = painterResource(id = R.drawable.ic_default_avatar)
+
     Column(
         modifier = modifier
             .fillMaxWidth()
@@ -39,9 +41,11 @@ fun ProfileHeader(
         verticalArrangement = Arrangement.Center
     ) {
         AsyncImage(
-            model = profilePictureUrl ?: defaultProfilePicture,
+            model = profilePictureUrl,
             contentDescription = "Profile Picture",
             contentScale = ContentScale.Crop,
+            placeholder = defaultPainter,
+            error = defaultPainter,
             modifier = Modifier
                 .size(120.dp)
                 .clip(CircleShape)
