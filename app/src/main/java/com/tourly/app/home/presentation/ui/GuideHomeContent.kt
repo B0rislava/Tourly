@@ -12,7 +12,7 @@ import androidx.compose.ui.unit.dp
 import com.tourly.app.core.presentation.ui.theme.OutfitFamily
 
 @Composable
-fun HomeContent(
+fun GuideHomeContent(
     modifier: Modifier = Modifier
 ) {
     Box(
@@ -22,7 +22,7 @@ fun HomeContent(
         contentAlignment = Alignment.Center
     ) {
         Text(
-            text = "Home Content - Coming Soon",
+            text = "Guide Home Content - Coming Soon",
             style = MaterialTheme.typography.headlineMedium,
             fontFamily = OutfitFamily
         )

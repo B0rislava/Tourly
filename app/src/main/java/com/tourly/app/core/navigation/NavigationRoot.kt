@@ -1,12 +1,15 @@
 package com.tourly.app.core.navigation
 
 import androidx.compose.runtime.Composable
-import com.tourly.app.core.ui.utils.rememberWindowSizeState
+import androidx.compose.runtime.LaunchedEffect
+import com.tourly.app.core.presentation.ui.GuideMainScreen
+import com.tourly.app.login.domain.UserRole
+import com.tourly.app.core.presentation.ui.utils.rememberWindowSizeState
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation3.runtime.NavEntry
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.ui.NavDisplay
-import com.tourly.app.core.ui.MainScreen
+import com.tourly.app.core.presentation.ui.MainScreen
 import com.tourly.app.login.presentation.ui.SignInScreen
 import com.tourly.app.login.presentation.ui.SignUpScreen
 import com.tourly.app.onboarding.presentation.ui.WelcomeScreen
@@ -16,7 +19,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import com.tourly.app.MainActivityUiState
 import com.tourly.app.MainViewModel
-import com.tourly.app.core.ui.SplashScreen
+import com.tourly.app.core.presentation.ui.SplashScreen
 
 @Composable
 fun NavigationRoot(
@@ -31,12 +34,29 @@ fun NavigationRoot(
         }
         is MainActivityUiState.Success -> {
             val startRoute = if (state.isUserLoggedIn) {
-                Route.Home
+                if (state.userRole == UserRole.GUIDE) {
+                    Route.GuideMain
+                } else {
+                    Route.TravelerMain
+                }
             } else {
                 Route.Welcome
             }
             
+            
             val backStack = rememberNavBackStack(startRoute)
+            
+            // Redirect Guide to GuideMain if they end up on TravelerMain (e.g. after login)
+            LaunchedEffect(state, backStack.lastOrNull()) {
+                if (state is MainActivityUiState.Success &&
+                    state.isUserLoggedIn &&
+                    state.userRole == UserRole.GUIDE &&
+                    backStack.lastOrNull() == Route.TravelerMain
+                ) {
+                    backStack.removeLastOrNull()
+                    backStack.add(Route.GuideMain)
+                }
+            }
 
             NavDisplay(
                 backStack = backStack,
@@ -64,7 +84,7 @@ fun NavigationRoot(
                             },
                             onLoginSuccess = {
                                 backStack.clear()
-                                backStack.add(Route.Home)
+                                backStack.add(Route.TravelerMain) 
                             }
                         )
                     }
@@ -76,9 +96,8 @@ fun NavigationRoot(
                                 backStack.add(Route.SignIn)
                             },
                             onSignUpSuccess = {
-                                // Clear back stack so user can't go back to auth screens
                                 backStack.clear()
-                                backStack.add(Route.Home)
+                                backStack.add(Route.TravelerMain)
                             }
                         )
                     }
@@ -92,9 +111,25 @@ fun NavigationRoot(
                         )
                     }
                 }
-                is Route.Home -> {
+                is Route.TravelerMain -> {
                     NavEntry(key) {
                         MainScreen(
+                            windowSizeState = windowSizeState,
+                            onLogout = {
+                                viewModel.logout {
+                                    backStack.clear()
+                                    backStack.add(Route.Welcome)
+                                }
+                            },
+                            onNavigateToSettings = {
+                                backStack.add(Route.Settings)
+                            }
+                        )
+                    }
+                }
+                is Route.GuideMain -> {
+                     NavEntry(key) {
+                        GuideMainScreen(
                             windowSizeState = windowSizeState,
                             onLogout = {
                                 viewModel.logout {

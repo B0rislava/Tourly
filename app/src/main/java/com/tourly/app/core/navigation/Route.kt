@@ -19,7 +19,10 @@ sealed interface Route: NavKey {
     data object TestConnection: Route, NavKey
   
     @Serializable
-    data object Home : Route, NavKey
+    data object TravelerMain : Route, NavKey
+
+    @Serializable
+    data object GuideMain : Route, NavKey
     
     // Bottom Navigation Routes
     @Serializable
