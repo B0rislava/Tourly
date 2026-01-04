@@ -1,5 +1,6 @@
-package com.tourly.app.core.ui
+package com.tourly.app.core.presentation.ui
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -9,40 +10,33 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.tourly.app.R
 import com.tourly.app.chat.presentation.ui.ChatScreen
-import com.tourly.app.core.ui.components.BottomNavDestination
-import com.tourly.app.core.ui.components.BottomNavigationBar
-import com.tourly.app.core.ui.components.SimpleTopBar
+import com.tourly.app.core.presentation.ui.components.BottomNavDestination
+import com.tourly.app.core.presentation.ui.components.BottomNavDestination.Companion.guideDestinations
+import com.tourly.app.core.presentation.ui.components.BottomNavigationBar
+import com.tourly.app.core.presentation.ui.components.SimpleTopBar
 import com.tourly.app.dashboard.presentation.ui.DashboardScreen
-import com.tourly.app.home.presentation.ui.HomeScreen
 import com.tourly.app.profile.presentation.ui.ProfileScreen
-import com.tourly.app.core.ui.utils.WindowSizeState
+import com.tourly.app.home.presentation.ui.GuideHomeScreen
 
 @Composable
-fun MainScreen(
-    windowSizeState: WindowSizeState,
-    onLogout: () -> Unit,
+fun GuideMainContent(
+    modifier: Modifier = Modifier,
+    selectedDestination: BottomNavDestination,
+    isEditingProfile: Boolean,
+    onCancelEdit: () -> Unit,
+    snackbarHostState: SnackbarHostState,
+    onDestinationSelected: (BottomNavDestination) -> Unit,
     onNavigateToSettings: () -> Unit,
-    modifier: Modifier = Modifier
+    onLogout: () -> Unit,
+    onEditingStateChange: (Boolean, (() -> Unit)?) -> Unit
 ) {
-    var selectedDestination by rememberSaveable {
-        mutableStateOf(BottomNavDestination.HOME)
-    }
-
-    var isEditingProfile by rememberSaveable { mutableStateOf(false) }
-    var onCancelEdit: (() -> Unit)? by remember { mutableStateOf(null) }
-
-    val snackbarHostState = remember { SnackbarHostState() }
-
     Scaffold(
         snackbarHost = { SnackbarHost(snackbarHostState) },
         topBar = {
@@ -54,7 +48,7 @@ fun MainScreen(
                 },
                 navigationIcon = {
                     if (isEditingProfile) {
-                        IconButton(onClick = { onCancelEdit?.invoke() }) {
+                        IconButton(onClick = onCancelEdit) {
                             Icon(
                                 imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                                 contentDescription = "Back"
@@ -78,24 +72,31 @@ fun MainScreen(
             if (!isEditingProfile) {
                 BottomNavigationBar(
                     selectedDestination = selectedDestination,
-                    onDestinationSelected = { destination ->
-                        selectedDestination = destination
-                    },
+                    destinations = guideDestinations,
+                    onDestinationSelected = onDestinationSelected,
                 )
             }
         },
         modifier = modifier
     ) { paddingValues ->
         when (selectedDestination) {
-            BottomNavDestination.HOME -> {
-                HomeScreen(
+            BottomNavDestination.GUIDE_HOME -> {
+                GuideHomeScreen(
                     modifier = Modifier.padding(paddingValues)
                 )
             }
-            BottomNavDestination.DASHBOARD -> {
+            BottomNavDestination.GUIDE_DASHBOARD -> {
                 DashboardScreen(
                     modifier = Modifier.padding(paddingValues)
                 )
+            }
+            BottomNavDestination.CREATE_TOUR -> {
+                Box(
+                    modifier = Modifier.padding(paddingValues),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text("Create Tour Screen - Coming Soon")
+                }
             }
             BottomNavDestination.CHAT -> {
                 ChatScreen(
@@ -106,13 +107,11 @@ fun MainScreen(
                 ProfileScreen(
                     snackbarHostState = snackbarHostState,
                     onLogout = onLogout,
-                    onEditingStateChange = { isEditing, cancelCallback ->
-                        isEditingProfile = isEditing
-                        onCancelEdit = cancelCallback
-                    },
+                    onEditingStateChange = onEditingStateChange,
                     modifier = Modifier.padding(paddingValues)
                 )
             }
+            else -> {}
         }
     }
 }
